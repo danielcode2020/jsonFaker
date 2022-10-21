@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-company
+      author: Daniel
+      changes:
+        - createTable:
+            tableName: company
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: catch_phrase
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: bs
+                  type: varchar(100)
+                  constraints:
+                    nullable: false

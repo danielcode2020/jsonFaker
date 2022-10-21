@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-geo
+      author: Daniel
+      changes:
+        - createTable:
+            tableName: geo
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: lat
+                  type: double precision
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lng
+                  type: double precision
+                  constraints:
+                    nullable: false
