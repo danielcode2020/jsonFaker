@@ -1,6 +1,8 @@
-#    url:jdbc:postgresql://localhost:5432/fakejson
+
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/fakejson
+    url: jdbc:postgresql://localhost:5433/users
     password: postgres
     username: postgres
+facker:
+  uri: https://jsonplaceholder.typicode.com/users

@@ -1,6 +1,7 @@
 package com.example.jsonfaker.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Users {
@@ -92,5 +93,30 @@ public class Users {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Users users = (Users) o;
+        return Objects.equals(id, users.id) && Objects.equals(name, users.name) && Objects.equals(username, users.username) && Objects.equals(email, users.email) && Objects.equals(phone, users.phone) && Objects.equals(website, users.website);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, username, email, phone, website);
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", website='" + website + '\'' +
+                '}';
     }
 }

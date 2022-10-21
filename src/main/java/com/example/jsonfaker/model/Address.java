@@ -18,16 +18,12 @@ public class Address {
     @JoinColumn(name = "geo_id", referencedColumnName = "id")
     private Geo geo;
 
-
-    public Address() {
+    public Long getId() {
+        return id;
     }
 
-    public Address(String street, String city, String suite, String zipcode, Geo geo) {
-        this.street = street;
-        this.city = city;
-        this.suite = suite;
-        this.zipcode = zipcode;
-        this.geo = geo;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getStreet() {
@@ -62,19 +58,13 @@ public class Address {
         this.zipcode = zipcode;
     }
 
-    public Geo getgeo() {
+    public Geo getGeo() {
         return geo;
     }
 
-    public void setgeo(Geo geo) {
+    public void setGeo(Geo geo) {
         this.geo = geo;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-
 
     @Override
     public String toString() {
