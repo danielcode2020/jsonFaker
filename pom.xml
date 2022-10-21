@@ -58,6 +58,13 @@
             <version>6.2.4.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.15.0</version>
+        </dependency>
+
+
 
     </dependencies>
 

@@ -1,9 +1,16 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/fakejson
+    url: jdbc:postgresql://localhost:5432/liquitest
     password: postgres
     username: postgres
+  liquibase:
+    enabled: true
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: none
+
 facker:
   uri: https://jsonplaceholder.typicode.com/users
 logging:

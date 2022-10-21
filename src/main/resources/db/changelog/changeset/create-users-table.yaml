@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users
+      author: Daniel
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              -  column:
+                   name: name
+                   type: varchar(100)
+                   constraints:
+                     nullable: false
+              - column:
+                  name: username
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: website
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: user_address_fk
+                    referencedTableName: address
+                    referencedColumnNames: id
+              - column:
+                  name: company_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: user_company_fk
+                    referencedTableName: company
+                    referencedColumnNames: id

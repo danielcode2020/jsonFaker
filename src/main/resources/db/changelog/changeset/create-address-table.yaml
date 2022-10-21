@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-address
+      author: Daniel
+      changes:
+        - createTable:
+            tableName: address
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: street
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: suite
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: city
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: zipcode
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: geo_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: address_geo_fk
+                    referencedTableName: geo
+                    referencedColumnNames: id
