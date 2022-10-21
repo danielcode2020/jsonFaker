@@ -1,7 +1,7 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/users
+    url: jdbc:postgresql://localhost:5432/fakejson
     password: postgres
     username: postgres
 facker:

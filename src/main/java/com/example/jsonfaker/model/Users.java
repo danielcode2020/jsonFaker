@@ -1,25 +1,36 @@
 package com.example.jsonfaker.model;
 
+import org.springframework.validation.annotation.Validated;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
+@Validated
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String name;
+    @NotNull
     private String username;
+    @NotNull
     private String email;
+    @NotNull
     private String phone;
+    @NotNull
     private String website;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @NotNull
     private Address address;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id", referencedColumnName = "id")
+    @NotNull
     private Company company;
 
     public Users(String name, String username, String email, String phone, String website, Address address, Company company) {
