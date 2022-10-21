@@ -12,8 +12,12 @@ import static java.lang.Boolean.FALSE;
 
 @Service
 public class GeoServiceImpl implements GeoService {
-    @Autowired
+
     private GeoRepository geoRepository;
+
+    public GeoServiceImpl(GeoRepository geoRepository) {
+        this.geoRepository = geoRepository;
+    }
 
     @Override
     public Long saveGeo(Geo geo) {

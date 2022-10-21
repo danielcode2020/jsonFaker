@@ -40,9 +40,7 @@ public class jsonController {
         JsonNode node = map.readTree(restTemplate.getForObject(uri, String.class));
 
         if(node.isArray()){
-            System.out.println("true");
             for(JsonNode jsonNode : node){
-                String fieldId = jsonNode.get("id").asText();
                 Users user = new Users();
                 user.setName(jsonNode.get("name").asText());
                 user.setUsername(jsonNode.get("username").asText());
