@@ -1,12 +1,17 @@
 package com.example.jsonfaker.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-@Component
-@ConfigurationProperties(prefix = "myapp")
-public class CustomProps {
-    private String uri = "https://jsonplaceholder.typicode.com/users";
+import javax.validation.constraints.NotEmpty;
+
+@Configuration
+@ConfigurationProperties(prefix = "facker", ignoreUnknownFields = false)
+public class AppProperties {
+
+    @NotEmpty
+    private String uri;
 
     public String getUri() {
         return uri;
