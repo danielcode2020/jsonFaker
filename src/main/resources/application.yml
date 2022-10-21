@@ -1,0 +1,6 @@
+#    url:jdbc:postgresql://localhost:5432/fakejson
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fakejson
+    password: postgres
+    username: postgres
