@@ -3,6 +3,7 @@ package com.example.jsonfaker.model;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Geo {
@@ -10,7 +11,11 @@ public class Geo {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
+
+    @NotNull
     private Double lat;
+
+    @NotNull
     private Double lng;
 
     public Geo(Double lat, Double lng) {

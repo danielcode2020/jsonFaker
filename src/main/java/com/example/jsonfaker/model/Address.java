@@ -3,19 +3,24 @@ package com.example.jsonfaker.model;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Address {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String street;
+    @NotNull
     private String city;
-
+    @NotNull
     private String suite;
+    @NotNull
     private String zipcode;
     @OneToOne(cascade = CascadeType.ALL) // ca sa adauge in tabele "copil" la salvare
     @JoinColumn(name = "geo_id", referencedColumnName = "id")
+    @NotNull
     private Geo geo;
 
     public Long getId() {
