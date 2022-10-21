@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class FackerController {
 
     private final Logger logger;
-
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
     private final AppProperties customProps;

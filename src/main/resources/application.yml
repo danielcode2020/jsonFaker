@@ -15,4 +15,4 @@ facker:
   uri: https://jsonplaceholder.typicode.com/users
 logging:
   file:
-    path: C:\logs
+    path: ${user.home}
