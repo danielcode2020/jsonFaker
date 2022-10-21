@@ -13,6 +13,3 @@ spring:
 
 facker:
   uri: https://jsonplaceholder.typicode.com/users
-logging:
-  file:
-    path: ${user.home}
