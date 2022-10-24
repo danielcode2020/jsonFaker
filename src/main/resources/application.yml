@@ -1,9 +1,4 @@
-
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/liquitest
-    password: postgres
-    username: postgres
   liquibase:
     enabled: true
   jpa:
@@ -13,6 +8,3 @@ spring:
 
 facker:
   uri: https://jsonplaceholder.typicode.com/users
-logging:
-  file:
-    path: ${user.home}
