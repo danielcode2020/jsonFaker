@@ -28,10 +28,10 @@ public class UsersController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers(){
         List<Users> users = new ArrayList<>();
+        usersRepository.findAll().forEach(users::add);
         if (users.isEmpty()){
             return new ResponseEntity<>("empty",HttpStatus.NOT_FOUND);
         }
-        usersRepository.findAll().forEach(users::add);
         return new ResponseEntity<>(users, HttpStatus.ACCEPTED);
     }
 
