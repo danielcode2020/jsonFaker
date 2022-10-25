@@ -65,7 +65,16 @@
             <version>4.15.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
 
     </dependencies>
 
@@ -83,17 +92,17 @@
                 <configuration>
                     <from>
                         <image>openjdk:17</image>
-                        <auth>
-                            <username>${jib.username}</username>
-                            <password>${jib.password}</password>
-                        </auth>
+<!--                        <auth>-->
+<!--                            <username>${jib.username}</username>-->
+<!--                            <password>${jib.password}</password>-->
+<!--                        </auth>-->
                     </from>
                     <to>
                         <image>danielmarandici/jsonfaker:latest</image>
-                        <auth>
-                            <username>${jib.username}</username>
-                            <password>${jib.password}</password>
-                        </auth>
+<!--                        <auth>-->
+<!--                            <username>${jib.username}</username>-->
+<!--                            <password>${jib.password}</password>-->
+<!--                        </auth>-->
                     </to>
                     <container>
                         <ports>

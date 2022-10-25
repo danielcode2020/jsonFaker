@@ -5,6 +5,16 @@ spring:
     database: postgresql
     hibernate:
       ddl-auto: none
+  datasource:
+    url: jdbc:postgresql://localhost:5432/liquitest
+    username: postgres
+    password: postgres
 
 facker:
   uri: https://jsonplaceholder.typicode.com/users
+
+
+jwt:
+    jwtCookie: jsonfaker
+    jwtSecret : jsonfakerSecretKey
+    jwtExpirationMs : 1800000
