@@ -4,6 +4,7 @@ import com.example.jsonfaker.model.Users;
 import com.example.jsonfaker.repository.UsersRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,11 +21,13 @@ public class UsersController {
         this.usersRepository = usersRepository;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<?> addUser(@Valid @RequestBody Users user){
         return new ResponseEntity<>(usersRepository.save(user).getId(), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('ANONYMOUS_USER')")
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers(){
         List<Users> users = new ArrayList<>();

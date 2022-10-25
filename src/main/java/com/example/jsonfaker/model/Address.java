@@ -23,6 +23,17 @@ public class Address {
     @NotNull
     private Geo geo;
 
+    public Address(String street, String city, String suite, String zipcode, Geo geo) {
+        this.street = street;
+        this.city = city;
+        this.suite = suite;
+        this.zipcode = zipcode;
+        this.geo = geo;
+    }
+
+    public Address() {
+    }
+
     public Long getId() {
         return id;
     }
