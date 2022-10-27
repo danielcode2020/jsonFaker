@@ -5,10 +5,10 @@ spring:
     database: postgresql
     hibernate:
       ddl-auto: none
-  datasource:
-    url: jdbc:postgresql://localhost:5432/liquitest
-    username: postgres
-    password: postgres
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/liquitest
+#    username: postgres
+#    password: postgres
 
 server:
   ssl:
@@ -20,7 +20,7 @@ server:
     key-store-password: daniel
     key-alias: baeldung
     enabled: true
-  port: 8443
+  port: 8080
 
 facker:
   uri: https://jsonplaceholder.typicode.com/users
