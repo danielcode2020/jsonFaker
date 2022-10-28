@@ -4,11 +4,14 @@ spring:
   jpa:
     database: postgresql
     hibernate:
-      ddl-auto: none
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/liquitest
-#    username: postgres
-#    password: postgres
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/liquitest
+    username: postgres
+    password: postgres
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 server:
   ssl:

@@ -1,7 +1,6 @@
 package com.example.jsonfaker.controller;
 
 import com.example.jsonfaker.configuration.AppProperties;
-import com.example.jsonfaker.configuration.DbStartupConfig;
 import com.example.jsonfaker.enums.Role;
 import com.example.jsonfaker.model.Address;
 import com.example.jsonfaker.model.Company;
@@ -62,12 +61,6 @@ public class FackerController {
             user.setPassword(userPassword); //password
         }
 
-        Geo geoAdmin = new Geo(2.3, 3.4);
-        Address addressAdmin = new Address("streetx","suitex","cityx", "zipcodex",geoAdmin);
-        Company companyAdmin = new Company("esempla","catchpx","bsx");
-        Users admin = new Users("admin","admin",bCryptPasswordEncoder.encode("admin"), Role.ADMIN,"admin@gmail.com","1234","ww.rand",addressAdmin,companyAdmin);
-
-        users.add(admin);
         usersRepository.saveAll(users);
         logger.info("succesfully saved");
         return new ResponseEntity(HttpStatus.CREATED);
