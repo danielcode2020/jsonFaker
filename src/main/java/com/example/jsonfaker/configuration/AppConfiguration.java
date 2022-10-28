@@ -51,18 +51,18 @@ public class AppConfiguration {
             context.addConstraint(securityConstraint);
         }
         };
-        tomcat.addAdditionalTomcatConnectors(redirectConnector());
+//        tomcat.addAdditionalTomcatConnectors(redirectConnector());
         return tomcat;
     }
     // for redirection from port 8080 http si https 8443
     // comment this block and line 54 for accepting only https on port 8443
-    private Connector redirectConnector() {
-        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-        connector.setScheme("http");
-        connector.setPort(8080);
-        connector.setSecure(false);
-        connector.setRedirectPort(8443);
-        return connector;
-    }
+//    private Connector redirectConnector() {
+//        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+//        connector.setScheme("http");
+//        connector.setPort(8080);
+//        connector.setSecure(false);
+//        connector.setRedirectPort(8443);
+//        return connector;
+//    }
 
 }

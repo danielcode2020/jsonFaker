@@ -4,11 +4,14 @@ spring:
   jpa:
     database: postgresql
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
   datasource:
     url: jdbc:postgresql://localhost:5432/liquitest
     username: postgres
     password: postgres
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 server:
   ssl:
@@ -20,7 +23,7 @@ server:
     key-store-password: daniel
     key-alias: baeldung
     enabled: true
-  port: 8443
+  port: 8080
 
 facker:
   uri: https://jsonplaceholder.typicode.com/users
