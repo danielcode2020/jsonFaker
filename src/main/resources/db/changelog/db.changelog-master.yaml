@@ -1,4 +1,7 @@
 databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Daniel
   - include:
       file: db/changelog/changeset/create-geo-table.yaml
   - include:
@@ -7,3 +10,5 @@ databaseChangeLog:
       file: db/changelog/changeset/create-company-table.yaml
   - include:
       file: db/changelog/changeset/create-users-table.yaml
+  - include:
+      file: db/changelog/changeset/insert-admin.yaml

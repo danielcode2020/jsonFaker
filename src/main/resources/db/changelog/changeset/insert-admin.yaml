@@ -1,0 +1,87 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_admin
+      author: Daniel
+      changes:
+        - insert:
+            tableName: geo
+            columns:
+              - column:
+                  name: id
+                  value: 100
+              - column:
+                  name: lat
+                  value: 2.22
+              - column:
+                  name: lng
+                  value: 3.33
+        - insert:
+            tableName: address
+            columns:
+              - column:
+                  name: id
+                  value: 100
+              - column:
+                  name: city
+                  value: admin_city
+              - column:
+                  name: street
+                  value: admin_street
+              - column:
+                  name: zipcode
+                  value: admin_zipcode
+              - column:
+                  name: suite
+                  value: admin_suite
+              - column:
+                  name: geo_id
+                  value: 100
+        - insert:
+            tableName: company
+            columns:
+              - column:
+                  name: id
+                  value: 100
+              - column:
+                  name: catch_phrase
+                  value: admin_catch
+              - column:
+                  name: name
+                  value: esempla
+              - column:
+                  name: bs
+                  value: admin_bs
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 100
+              - column:
+                  name: email
+                  value: admin@gmail
+              - column:
+                  name: name
+                  value: admin
+              - column:
+                  name: password
+                  # password is admin
+                  value: $2a$12$NbbFf7hWSuy1wnP1IW/e/e2DrTo.kpfEdcxEmQjJCRsW4LYOt2bBq
+              - column:
+                  name: phone
+                  value: 1234
+              - column:
+                  name: role
+                  value: ADMIN
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: website
+                  value: www.admin.org
+              - column:
+                  name: address_id
+                  value: 100
+              - column:
+                  name: company_id
+                  value: 100
