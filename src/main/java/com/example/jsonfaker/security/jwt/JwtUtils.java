@@ -6,7 +6,6 @@ import com.example.jsonfaker.model.Users;
 import com.example.jsonfaker.repository.UsersRepository;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
@@ -27,21 +26,21 @@ public class JwtUtils {
         this.usersRepository = usersRepository;
     }
 
-    public String getJwtFromCookies(HttpServletRequest request){
+    public String getJwtFromCookies(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, jwtProperties.getJwtCookie());
-        if (cookie != null){
+        if (cookie != null) {
             return cookie.getValue();
-        } else{
+        } else {
             return null;
         }
     }
 
-    public String generateJwtToken(Users userPrincipal){ // as param class which implements UserDetails
+    public String generateJwtToken(Users userPrincipal) { // as param class which implements UserDetails
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
         return jwt;
     }
 
-    public String generateTokenFromUsername(String username){
+    public String generateTokenFromUsername(String username) {
         Optional<Users> currentUser = usersRepository.findByUsername(username);
 
         Optional<Users> first = currentUser.stream().findFirst();
@@ -50,7 +49,7 @@ public class JwtUtils {
 
         return Jwts.builder()
                 .setSubject(username)
-                .claim("ROLE",role)
+                .claim("ROLE", role)
                 .setId(String.valueOf(first.get().getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtProperties.getJwtExpirationMs()))
@@ -78,7 +77,7 @@ public class JwtUtils {
     }
 
 
-    public String getUsernameFromJwtToken(String token){
+    public String getUsernameFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtProperties.getJwtSecret()).parseClaimsJws(token).getBody().getSubject();
     }
 
