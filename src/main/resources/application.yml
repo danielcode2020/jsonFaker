@@ -30,6 +30,6 @@ facker:
 
 
 jwt:
-    jwtCookie: jsonfaker
-    jwtSecret : jsonfakerSecretKey
-    jwtExpirationMs : 1800000
+  jwtCookie: jsonfaker
+  jwtSecret: jsonfakerSecretKey
+  jwtExpirationMs: 1800000 #30 min

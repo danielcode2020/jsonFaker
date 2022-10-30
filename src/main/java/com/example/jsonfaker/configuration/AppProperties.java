@@ -2,7 +2,6 @@ package com.example.jsonfaker.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
 

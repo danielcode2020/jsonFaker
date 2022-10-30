@@ -1,14 +1,11 @@
 package com.example.jsonfaker.controller;
 
 import com.example.jsonfaker.configuration.AppProperties;
-import com.example.jsonfaker.enums.Role;
-import com.example.jsonfaker.model.Address;
-import com.example.jsonfaker.model.Company;
-import com.example.jsonfaker.model.Geo;
 import com.example.jsonfaker.model.Users;
 import com.example.jsonfaker.repository.UsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiImplicitParam;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
-
 import java.util.stream.Collectors;
 
 import static com.example.jsonfaker.enums.Role.ANONYMOUS_USER;
@@ -50,15 +46,16 @@ public class FackerController {
     }
 
     @GetMapping("/populate")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity getData() throws JsonProcessingException {
         String userPassword = bCryptPasswordEncoder.encode("user");
         ResponseEntity<Object[]> response = restTemplate.getForEntity(customProps.getUri(), Object[].class);
         List<Users> users = Arrays.stream(response.getBody())
                 .map(obj -> objectMapper.convertValue(obj, Users.class))
                 .collect(Collectors.toList());
-        for (Users user: users) {
+        for (Users user : users) {
             user.setRole(ANONYMOUS_USER);
-            user.setPassword(userPassword); //password
+            user.setPassword(userPassword); //user
         }
 
         usersRepository.saveAll(users);
@@ -67,7 +64,8 @@ public class FackerController {
     }
 
     @PostMapping("/add")// for testing validation
-    public ResponseEntity addUser(@Valid @RequestBody Users user){
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+    public ResponseEntity addUser(@Valid @RequestBody Users user) {
         usersRepository.save(user);
         return ResponseEntity.ok("saved");
     }
