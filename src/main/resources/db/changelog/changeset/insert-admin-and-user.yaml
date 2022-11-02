@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_admin_and_user
+      author: Daniel
+      changes:
+        - insert:
+            tableName: system_users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: password
+                  value: $2a$12$NbbFf7hWSuy1wnP1IW/e/e2DrTo.kpfEdcxEmQjJCRsW4LYOt2bBq
+        - insert:
+            tableName: system_users
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: username
+                  value: user
+              - column:
+                  name: password
+                  value: $2a$12$uE9jtvnZXBRPjGB57ftP0echz54iHKjHilPLwF4nwIdZ5xIakVsjC
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: ROLE_ADMIN
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: ROLE_USER
+        - insert:
+            tableName: system_users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: role_name
+                  value: ROLE_ADMIN
+        - insert:
+            tableName: system_users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: role_name
+                  value: ROLE_USER

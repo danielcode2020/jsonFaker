@@ -1,5 +1,6 @@
 package com.example.jsonfaker.controller;
 
+import com.example.jsonfaker.model.SystemUser;
 import com.example.jsonfaker.model.Users;
 import com.example.jsonfaker.model.dto.LoginRequest;
 import com.example.jsonfaker.repository.UsersRepository;
@@ -41,7 +42,7 @@ public class AuthController {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        Users userDetails = (Users) authentication.getPrincipal();
+        SystemUser userDetails = (SystemUser) authentication.getPrincipal();
 
         String jwt = jwtUtils.generateJwtToken(userDetails);
 
