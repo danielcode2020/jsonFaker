@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-system-users
+      author: Daniel
+      changes:
+        - createTable:
+            tableName: system_users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(100)
+                  constraints:
+                    nullable: false

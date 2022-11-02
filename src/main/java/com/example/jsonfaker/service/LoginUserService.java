@@ -1,6 +1,6 @@
 package com.example.jsonfaker.service;
 
-import com.example.jsonfaker.repository.UsersRepository;
+import com.example.jsonfaker.repository.SystemUserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LoginUserService implements UserDetailsService {
-    private final UsersRepository usersRepository;
+    private final SystemUserRepository systemUserRepository;
 
-    public LoginUserService(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
+    public LoginUserService(SystemUserRepository systemUserRepository) {
+        this.systemUserRepository = systemUserRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usersRepository.findByUsername(username)
+        return systemUserRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with this username not found"));
     }
 

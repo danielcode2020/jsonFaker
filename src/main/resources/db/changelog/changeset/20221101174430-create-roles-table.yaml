@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-roles
+      author: Daniel
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    primaryKey: true
+                    nullable: false

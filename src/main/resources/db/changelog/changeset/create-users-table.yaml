@@ -24,16 +24,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: password
-                  type: varchar(100)
-                  constraints:
-                    - nullable: false
-              - column:
-                  name: role
-                  type: varchar(100)
-                  constraints:
-                    - nullable: false
-              - column:
                   name: email
                   type: varchar(100)
                   constraints:
