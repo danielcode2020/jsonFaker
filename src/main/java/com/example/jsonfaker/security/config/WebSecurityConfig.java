@@ -42,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/api/users/all",
                         "/api/populate",
+                        "/api/export-csv",
                         "/auth/login",
                         "/auth/logout",
                         "/api/populate",
