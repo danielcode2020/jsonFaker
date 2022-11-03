@@ -13,6 +13,9 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+csv:
+  filename: "jsonFakerUsers.csv"
+
 server:
   ssl:
     # keystore format, could be also JKS
