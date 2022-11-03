@@ -6,9 +6,9 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:5432/liquitest
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://localhost:5432/json_faker
+    username: daniel
+    password: daniel
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
