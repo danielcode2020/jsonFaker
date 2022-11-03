@@ -1,6 +1,7 @@
 package com.example.jsonfaker.controller;
 
 import com.example.jsonfaker.configuration.AppProperties;
+import com.example.jsonfaker.configuration.CSVProperties;
 import com.example.jsonfaker.csvUtils.CustomMappingStrategy;
 import com.example.jsonfaker.excelUtils.UserExcelExporter;
 import com.example.jsonfaker.model.Users;
@@ -10,6 +11,7 @@ import com.example.jsonfaker.security.AuthoritiesConstants;
 import com.example.jsonfaker.service.UserExportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVWriter;
+import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,6 +26,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,17 +48,20 @@ public class FackerController {
 
     private final UserExportService userExportService;
 
+    private final CSVProperties csvProperties;
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     public FackerController(Logger logger, ObjectMapper objectMapper, RestTemplate restTemplate,
-                            AppProperties customProps, UsersRepository usersRepository, UserExportService userExportService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+                            AppProperties customProps, UsersRepository usersRepository, UserExportService userExportService, CSVProperties csvProperties, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.logger = logger;
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
         this.customProps = customProps;
         this.usersRepository = usersRepository;
         this.userExportService = userExportService;
+        this.csvProperties = csvProperties;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -74,10 +81,9 @@ public class FackerController {
     @GetMapping("/export-csv")
     public void exportCSV(HttpServletResponse response) throws Exception{
 
-        String fileName = "jsonFakerUsers.csv";
         response.setContentType("text/csv");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" +fileName + "\"");
+                "attachment; filename=\"" +csvProperties.getFilename()+ "\"");
 
         CustomMappingStrategy<UserExportDTO> mappingStrategy = new CustomMappingStrategy<>();
         mappingStrategy.setType(UserExportDTO.class);
@@ -105,6 +111,20 @@ public class FackerController {
 
         UserExcelExporter excelExporter = new UserExcelExporter(userExportService.getUsers());
         excelExporter.export(response);
+    }
+
+    @GetMapping("/read-csv")
+    public void readCSV() throws FileNotFoundException {
+        List<UserExportDTO> userExportDTOList = new CsvToBeanBuilder( new FileReader(System.getProperty("user.home") + "/Downloads/" + csvProperties.getFilename()))
+                .withType(UserExportDTO.class)
+                .build()
+                .parse();
+        usersRepository.saveAll(userExportService.getUsersFromUsersDto(userExportDTOList));
+    }
+
+    @GetMapping("/delete-users-from-db")
+    public void deleteUsersFromDb(){
+        usersRepository.deleteAll();
     }
 
     @PostMapping("/add")// for testing validation

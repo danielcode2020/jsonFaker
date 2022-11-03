@@ -29,10 +29,10 @@ public class UserExportDTO {
     private String zipcode;
     @CsvBindByPosition(position = 7)
     @CsvBindByName(column = "lat")
-    private Double lat;
+    private String lat;
     @CsvBindByPosition(position = 8)
     @CsvBindByName(column = "lng")
-    private Double lng;
+    private String lng;
     @CsvBindByPosition(position = 9)
     @CsvBindByName(column = "phone")
     private String phone;
@@ -40,7 +40,7 @@ public class UserExportDTO {
     @CsvBindByName(column = "website")
     private String website;
 
-    public UserExportDTO(String name, String username, String email, String street, String suite, String city, String zipcode, Double lat, Double lng, String phone, String website) {
+    public UserExportDTO(String name, String username, String email, String street, String suite, String city, String zipcode, String lat, String lng, String phone, String website) {
         this.name = name;
         this.username = username;
         this.email = email;
@@ -52,6 +52,9 @@ public class UserExportDTO {
         this.lng = lng;
         this.phone = phone;
         this.website = website;
+    }
+
+    public UserExportDTO() {
     }
 
     public String getName() {
@@ -110,19 +113,19 @@ public class UserExportDTO {
         this.zipcode = zipcode;
     }
 
-    public Double getLat() {
+    public String getLat() {
         return lat;
     }
 
-    public void setLat(Double lat) {
+    public void setLat(String lat) {
         this.lat = lat;
     }
 
-    public Double getLng() {
+    public String getLng() {
         return lng;
     }
 
-    public void setLng(Double lng) {
+    public void setLng(String lng) {
         this.lng = lng;
     }
 

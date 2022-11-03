@@ -44,6 +44,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/populate",
                         "/api/export-csv",
                         "/api/export-excel",
+                        "/api/read-csv",
+                        "/api/delete-users-from-db",
                         "/auth/login",
                         "/auth/logout",
                         "/api/populate",
