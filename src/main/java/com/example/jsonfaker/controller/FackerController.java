@@ -2,14 +2,14 @@ package com.example.jsonfaker.controller;
 
 import com.example.jsonfaker.configuration.AppProperties;
 import com.example.jsonfaker.csvUtils.CustomMappingStrategy;
+import com.example.jsonfaker.excelUtils.UserExcelExporter;
 import com.example.jsonfaker.model.Users;
-import com.example.jsonfaker.model.dto.UsersDtoCSV;
+import com.example.jsonfaker.model.dto.UserExportDTO;
 import com.example.jsonfaker.repository.UsersRepository;
 import com.example.jsonfaker.security.AuthoritiesConstants;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.jsonfaker.service.UserExportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVWriter;
-import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,12 +24,11 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.FileWriter;
-import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,16 +42,19 @@ public class FackerController {
     private final AppProperties customProps;
     private final UsersRepository usersRepository;
 
+    private final UserExportService userExportService;
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     public FackerController(Logger logger, ObjectMapper objectMapper, RestTemplate restTemplate,
-                            AppProperties customProps, UsersRepository usersRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+                            AppProperties customProps, UsersRepository usersRepository, UserExportService userExportService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.logger = logger;
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
         this.customProps = customProps;
         this.usersRepository = usersRepository;
+        this.userExportService = userExportService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -77,35 +79,32 @@ public class FackerController {
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" +fileName + "\"");
 
-        CustomMappingStrategy<UsersDtoCSV> mappingStrategy = new CustomMappingStrategy<>();
-        mappingStrategy.setType(UsersDtoCSV.class);
+        CustomMappingStrategy<UserExportDTO> mappingStrategy = new CustomMappingStrategy<>();
+        mappingStrategy.setType(UserExportDTO.class);
 
-        StatefulBeanToCsv<UsersDtoCSV> writer = new StatefulBeanToCsvBuilder<UsersDtoCSV>(response.getWriter())
+        StatefulBeanToCsv<UserExportDTO> writer = new StatefulBeanToCsvBuilder<UserExportDTO>(response.getWriter())
                 .withMappingStrategy(mappingStrategy)
                 .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
                 .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
                 .withOrderedResults(false)
                 .build();
 
-        List<UsersDtoCSV> usersDtoCSVList = new ArrayList<>();
 
-        usersRepository.findAll().forEach(user -> usersDtoCSVList.add(
-                new UsersDtoCSV(user.getName(),
-                        user.getUsername(),
-                        user.getEmail() ,
-                        user.getAddress().getStreet(),
-                        user.getAddress().getSuite(),
-                        user.getAddress().getCity(),
-                        user.getAddress().getZipcode(),
-                        user.getAddress().getGeo().getLat(),
-                        user.getAddress().getGeo().getLng(),
-                        user.getPhone(),
-                        user.getWebsite()
-                ))
+        writer.write(userExportService.getUsers());
+    }
 
-                );
+    @GetMapping("/export-excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException{
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
 
-        writer.write(usersDtoCSVList);
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        UserExcelExporter excelExporter = new UserExcelExporter(userExportService.getUsers());
+        excelExporter.export(response);
     }
 
     @PostMapping("/add")// for testing validation
