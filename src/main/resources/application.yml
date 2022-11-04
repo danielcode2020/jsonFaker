@@ -7,8 +7,8 @@ spring:
       ddl-auto: update
   datasource:
     url: jdbc:postgresql://localhost:5432/json_faker
-    username: daniel
-    password: daniel
+    username: postgres
+    password: postgres
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

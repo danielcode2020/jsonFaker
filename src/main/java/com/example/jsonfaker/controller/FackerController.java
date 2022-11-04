@@ -14,21 +14,18 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import io.swagger.annotations.ApiImplicitParam;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -112,13 +109,22 @@ public class FackerController {
         excelExporter.export(response);
     }
 
-    @GetMapping("/upload-from-csv")
-    public void readCSV() throws FileNotFoundException {
-        List<UserExportDTO> userExportDTOList = new CsvToBeanBuilder(new FileReader(System.getProperty("user.home") + "/Downloads/" + csvProperties.getFilename()))
-                .withType(UserExportDTO.class)
-                .build()
-                .parse();
-        usersRepository.saveAll(userExportService.getUsersFromUsersDto(userExportDTOList));
+    @PostMapping("/upload-from-csv")
+    public void uploadCSVFile(@RequestParam("file") MultipartFile file ){
+        if(file.isEmpty()){
+            logger.error("file is empty");
+        } else{
+            try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))){
+                List<UserExportDTO> userExportDTOList = new CsvToBeanBuilder(reader)
+                        .withType(UserExportDTO.class)
+                        .build()
+                        .parse();
+                logger.info("received list of users from file");
+                usersRepository.saveAll(userExportService.getUsersFromUsersDto(userExportDTOList));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @DeleteMapping
