@@ -1,7 +1,6 @@
 package com.example.jsonfaker.controller;
 
 import com.example.jsonfaker.model.SystemUser;
-import com.example.jsonfaker.model.Users;
 import com.example.jsonfaker.model.dto.LoginRequest;
 import com.example.jsonfaker.repository.UsersRepository;
 import com.example.jsonfaker.security.jwt.JwtUtils;

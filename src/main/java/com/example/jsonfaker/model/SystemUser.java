@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
@@ -26,7 +25,7 @@ public class SystemUser implements UserDetails {
     private String password;
 
     @JsonIgnore
-    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "system_users_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},

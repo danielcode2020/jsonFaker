@@ -1,7 +1,6 @@
 package com.example.jsonfaker.security.jwt;
 
 import com.example.jsonfaker.configuration.JWTProperties;
-
 import com.example.jsonfaker.model.SystemUser;
 import com.example.jsonfaker.repository.SystemUserRepository;
 import io.jsonwebtoken.*;
@@ -47,7 +46,7 @@ public class JwtUtils {
         SystemUser currentUser = systemUserRepository.findByUsername(username).stream().findFirst().get();
         return Jwts.builder()
                 .setSubject(username)
-                .claim(AUTHORITIES_KEY,currentUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(",")))
+                .claim(AUTHORITIES_KEY, currentUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(",")))
                 .setId(String.valueOf(currentUser.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtProperties.getJwtExpirationMs()))

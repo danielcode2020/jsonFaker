@@ -11,7 +11,7 @@ public class CustomMappingStrategy<T> extends ColumnPositionMappingStrategy<T> {
     @Override
     public String[] generateHeader(T bean) throws CsvRequiredFieldEmptyException {
 
-        super.setColumnMapping(new String[ FieldUtils.getAllFields(bean.getClass()).length]);
+        super.setColumnMapping(new String[FieldUtils.getAllFields(bean.getClass()).length]);
         final int numColumns = findMaxFieldIndex();
         if (!isAnnotationDriven() || numColumns == -1) {
             return super.generateHeader(bean);

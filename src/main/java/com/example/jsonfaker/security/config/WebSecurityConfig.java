@@ -1,5 +1,6 @@
 package com.example.jsonfaker.security.config;
 
+import com.example.jsonfaker.security.AuthoritiesConstants;
 import com.example.jsonfaker.security.jwt.AuthEntryPointJwt;
 import com.example.jsonfaker.security.jwt.AuthTokenFilter;
 import org.springframework.context.annotation.Bean;
@@ -40,16 +41,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
                 .authorizeRequests()
                 .antMatchers(
-                        "/api/users/all",
-                        "/api/populate",
-                        "/api/export-csv",
-                        "/api/export-excel",
-                        "/api/read-csv",
-                        "/api/delete-users-from-db",
-                        "/auth/login",
-                        "/auth/logout",
-                        "/api/populate",
-                        "/api/add",
                         "/v2/api-docs",
                         "/swagger-resources",
                         "/swagger-resources/**",
@@ -57,9 +48,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/configuration/security",
                         "/swagger-ui.html",
                         "/webjars/**",
-                        // -- Swagger UI v3 (OpenAPI)
                         "/v3/api-docs/**",
                         "/swagger-ui/**").permitAll()
+                .antMatchers(
+                        "/auth/login",
+                        "/api/faker/export-csv",
+                        "/api/faker/export-excel").permitAll()
+                .antMatchers("/api/users/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
+                .antMatchers("/api/faker/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
                 .anyRequest()
                 .authenticated()
                 .and()

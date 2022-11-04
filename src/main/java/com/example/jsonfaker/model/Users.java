@@ -1,13 +1,9 @@
 package com.example.jsonfaker.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
