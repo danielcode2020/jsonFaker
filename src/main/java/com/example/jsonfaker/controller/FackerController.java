@@ -7,7 +7,6 @@ import com.example.jsonfaker.excelUtils.UserExcelExporter;
 import com.example.jsonfaker.model.Users;
 import com.example.jsonfaker.model.dto.UserExportDTO;
 import com.example.jsonfaker.repository.UsersRepository;
-import com.example.jsonfaker.security.AuthoritiesConstants;
 import com.example.jsonfaker.service.UserExportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVWriter;
@@ -19,13 +18,14 @@ import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/faker")
 public class FackerController {
 
     private final Logger logger;
@@ -67,8 +67,7 @@ public class FackerController {
 
     @GetMapping("/populate")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity getData(){
+    public ResponseEntity getData() {
         ResponseEntity<Object[]> response = restTemplate.getForEntity(customProps.getUri(), Object[].class);
         List<Users> users = Arrays.stream(response.getBody())
                 .map(obj -> objectMapper.convertValue(obj, Users.class))
@@ -79,11 +78,11 @@ public class FackerController {
     }
 
     @GetMapping("/export-csv")
-    public void exportCSV(HttpServletResponse response) throws Exception{
+    public void exportCSV(HttpServletResponse response) throws Exception {
 
         response.setContentType("text/csv");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" +csvProperties.getFilename()+ "\"");
+                "attachment; filename=\"" + csvProperties.getFilename() + "\"");
 
         CustomMappingStrategy<UserExportDTO> mappingStrategy = new CustomMappingStrategy<>();
         mappingStrategy.setType(UserExportDTO.class);
@@ -100,7 +99,7 @@ public class FackerController {
     }
 
     @GetMapping("/export-excel")
-    public void exportToExcel(HttpServletResponse response) throws IOException{
+    public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
@@ -113,24 +112,18 @@ public class FackerController {
         excelExporter.export(response);
     }
 
-    @GetMapping("/read-csv")
+    @GetMapping("/upload-from-csv")
     public void readCSV() throws FileNotFoundException {
-        List<UserExportDTO> userExportDTOList = new CsvToBeanBuilder( new FileReader(System.getProperty("user.home") + "/Downloads/" + csvProperties.getFilename()))
+        List<UserExportDTO> userExportDTOList = new CsvToBeanBuilder(new FileReader(System.getProperty("user.home") + "/Downloads/" + csvProperties.getFilename()))
                 .withType(UserExportDTO.class)
                 .build()
                 .parse();
         usersRepository.saveAll(userExportService.getUsersFromUsersDto(userExportDTOList));
     }
 
-    @GetMapping("/delete-users-from-db")
-    public void deleteUsersFromDb(){
+    @DeleteMapping
+    public void deleteUsersFromDb() {
         usersRepository.deleteAll();
     }
 
-    @PostMapping("/add")// for testing validation
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-    public ResponseEntity addUser(@Valid @RequestBody Users user) {
-        usersRepository.save(user);
-        return ResponseEntity.ok("saved");
-    }
 }

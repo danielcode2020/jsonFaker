@@ -6,7 +6,7 @@ services:
     environment:
       - 'POSTGRES_USER=postgres'
       - 'POSTGRES_PASSWORD=postgres'
-      - 'POSTGRES_DB=liquitest'
+      - 'POSTGRES_DB=json_faker'
     ports:
       - 5432:5432
   app:
@@ -17,7 +17,7 @@ services:
     ports:
       - 8080:8080
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/liquitest
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/json_faker
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update

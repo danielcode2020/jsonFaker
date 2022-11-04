@@ -19,13 +19,13 @@ public class UserExportService {
         this.usersRepository = usersRepository;
     }
 
-    public List<UserExportDTO> getUsers(){
+    public List<UserExportDTO> getUsers() {
         List<UserExportDTO> userExportDTOList = new ArrayList<>();
 
         usersRepository.findAll().forEach(user -> userExportDTOList.add(
                 new UserExportDTO(user.getName(),
                         user.getUsername(),
-                        user.getEmail() ,
+                        user.getEmail(),
                         user.getAddress().getStreet(),
                         user.getAddress().getSuite(),
                         user.getAddress().getCity(),
@@ -40,8 +40,8 @@ public class UserExportService {
         return userExportDTOList;
     }
 
-    public List<Users> getUsersFromUsersDto(List<UserExportDTO> userExportDTOS){
-        List<Users>  usersList = new ArrayList<>();
+    public List<Users> getUsersFromUsersDto(List<UserExportDTO> userExportDTOS) {
+        List<Users> usersList = new ArrayList<>();
         // skip 1 because first column are the names
         userExportDTOS.stream().skip(1).forEach(userExportDTO -> usersList.add(
                 new Users(
@@ -68,7 +68,7 @@ public class UserExportService {
                         )
 
                 )
-        ) );
+        ));
 
         return usersList;
 

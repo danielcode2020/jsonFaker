@@ -23,7 +23,7 @@ public class UserExcelExporter {
         workbook = new XSSFWorkbook();
     }
 
-    private void writeHeaderLine(){
+    private void writeHeaderLine() {
         sheet = workbook.createSheet("Users");
 
         Row row = sheet.createRow(0);
@@ -55,7 +55,7 @@ public class UserExcelExporter {
             cell.setCellValue((Integer) value);
         } else if (value instanceof Boolean) {
             cell.setCellValue((Boolean) value);
-        }else {
+        } else {
             cell.setCellValue((String) value);
         }
         cell.setCellStyle(style);
