@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/faker")
+@CrossOrigin
 public class FackerController {
 
     private final Logger logger;
