@@ -17,15 +17,15 @@ csv:
   filename: "jsonFakerUsers.csv"
 
 server:
-  ssl:
-    # keystore format, could be also JKS
-    key-store-type: PKCS12
-    # The path to the keystore containing the certificatekeystore/baeldung.p12
-    key-store: classpath:keystore/baeldung.p12
-    # password used to generate the certificate
-    key-store-password: daniel
-    key-alias: baeldung
-    enabled: true
+#  ssl:
+#    # keystore format, could be also JKS
+#    key-store-type: PKCS12
+#    # The path to the keystore containing the certificatekeystore/baeldung.p12
+#    key-store: classpath:keystore/baeldung.p12
+#    # password used to generate the certificate
+#    key-store-password: daniel
+#    key-alias: baeldung
+#    enabled: true
   port: 8080
 
 facker:
