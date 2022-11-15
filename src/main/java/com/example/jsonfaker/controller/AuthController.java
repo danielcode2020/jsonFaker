@@ -2,6 +2,7 @@ package com.example.jsonfaker.controller;
 
 import com.example.jsonfaker.model.SystemUser;
 import com.example.jsonfaker.model.dto.LoginRequest;
+import com.example.jsonfaker.model.dto.TokenResponse;
 import com.example.jsonfaker.repository.UsersRepository;
 import com.example.jsonfaker.security.jwt.JwtUtils;
 import com.example.jsonfaker.service.LoginUserService;
@@ -31,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public TokenResponse authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -43,7 +44,7 @@ public class AuthController {
 
         String jwt = jwtUtils.generateJwtToken(userDetails);
 
-        return ResponseEntity.ok(jwt);
+        return new TokenResponse(jwt);
     }
 
 
