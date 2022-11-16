@@ -29,13 +29,10 @@ public class UsersController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllUsers() {
+    public List<Users> getAllUsers() {
         List<Users> users = new ArrayList<>();
         usersRepository.findAll().forEach(users::add);
-        if (users.isEmpty()) {
-            return new ResponseEntity<>("empty", HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(users, HttpStatus.ACCEPTED);
+        return users;
     }
 
     @PutMapping
@@ -45,16 +42,13 @@ public class UsersController {
             usersRepository.save(user);
             return new ResponseEntity<>("updated", HttpStatus.ACCEPTED);
         }
-        return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{id}")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-    public ResponseEntity<?> getUserById(@Valid @PathVariable("id") Long id) {
-        if (usersRepository.existsById(id)) {
-            return new ResponseEntity<>(usersRepository.findById(id).stream().findFirst().get(), HttpStatus.FOUND);
-        }
-        return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
+    public Users getUserById(@Valid @PathVariable("id") Long id) {
+        return usersRepository.findById(id).stream().findFirst().get();
     }
 
     @DeleteMapping("/{id}")
