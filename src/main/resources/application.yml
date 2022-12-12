@@ -5,10 +5,10 @@ spring:
     database: postgresql
     hibernate:
       ddl-auto: update
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/json_faker
-#    username: postgres
-#    password: postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/json_faker
+    username: daniel
+    password: daniel
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -27,6 +27,14 @@ server:
 #    key-alias: baeldung
 #    enabled: true
   port: 8080
+
+management:
+  server:
+    port: 9001
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics
 
 facker:
   uri: https://jsonplaceholder.typicode.com/users
