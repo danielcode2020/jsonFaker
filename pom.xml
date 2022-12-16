@@ -139,10 +139,6 @@
                     </from>
                     <to>
                         <image>danielmarandici/jsonfaker:latest</image>
-<!--                        <auth>-->
-<!--                            <username>${jib.username}</username>-->
-<!--                            <password>${jib.password}</password>-->
-<!--                        </auth>-->
                     </to>
                     <container>
                         <ports>
