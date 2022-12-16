@@ -2,23 +2,32 @@ package com.example.jsonfaker.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.*;
 
 @Entity
+@XmlRootElement(name = "address")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "id")
     private Long id;
     @NotNull
+    @XmlElement(name = "street")
     private String street;
     @NotNull
+    @XmlElement(name = "city")
     private String city;
     @NotNull
+    @XmlElement(name = "suite")
     private String suite;
     @NotNull
+    @XmlElement(name = "zipcode")
     private String zipcode;
     @OneToOne(cascade = CascadeType.ALL) // ca sa adauge in tabele "copil" la salvare
     @JoinColumn(name = "geo_id", referencedColumnName = "id")
     @NotNull
+    @XmlElement(name = "geo")
     private Geo geo;
 
     public Address(String street, String city, String suite, String zipcode, Geo geo) {

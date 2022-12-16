@@ -4,33 +4,46 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.*;
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Entity
 @Validated
+@XmlSeeAlso(ArrayList.class)
+@XmlRootElement(name = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "id")
     private Long id;
     @NotNull
+    @XmlElement(name = "name")
     private String name;
     @NotNull
+    @XmlElement(name = "username")
     private String username;
     @NotNull
+    @XmlElement(name = "email")
     private String email;
     @NotNull
+    @XmlElement(name = "phone")
     private String phone;
     @NotNull
+    @XmlElement(name = "website")
     private String website;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     @NotNull
+    @XmlElement(name = "address")
     private Address address;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     @NotNull
+    @XmlElement(name = "company")
     private Company company;
 
     public Users(Long id, String name, String username, String email, String phone, String website, Address address, Company company) {
