@@ -18,8 +18,6 @@
 
     <properties>
         <java.version>17</java.version>
-        <jib.username>danielmarandici</jib.username>
-        <jib.password>danUTM2020</jib.password>
     </properties>
 
     <dependencies>
@@ -121,6 +119,8 @@
             <version>4.1.2</version>
         </dependency>
 
+
+
     </dependencies>
 
     <build>
@@ -129,7 +129,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
@@ -137,17 +136,13 @@
                 <configuration>
                     <from>
                         <image>openjdk:17</image>
-                        <auth>
-                            <username>${jib.username}</username>
-                            <password>${jib.password}</password>
-                        </auth>
                     </from>
                     <to>
                         <image>danielmarandici/jsonfaker:latest</image>
-                        <auth>
-                            <username>${jib.username}</username>
-                            <password>${jib.password}</password>
-                        </auth>
+<!--                        <auth>-->
+<!--                            <username>${jib.username}</username>-->
+<!--                            <password>${jib.password}</password>-->
+<!--                        </auth>-->
                     </to>
                     <container>
                         <ports>

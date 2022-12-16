@@ -5,18 +5,28 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
+@XmlRootElement(name = "company")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "id")
     private Long id;
 
     @NotNull
+    @XmlElement(name = "name")
     private String name;
     @NotNull
+    @XmlElement(name = "catchphrase")
     private String catchPhrase;
     @NotNull
+    @XmlElement(name = "bs")
     private String bs;
 
     public Company(String name, String catchPhrase, String bs) {
