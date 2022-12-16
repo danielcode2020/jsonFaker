@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -159,6 +160,31 @@ public class FackerController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=\""+exporter.exportXMLFileName() + ".xml\"")
                 .body(export);
+    }
+
+    @PostMapping("/populate-db-from-xml")
+    public ResponseEntity<String> populateDbFromXML(@RequestParam("file") MultipartFile file ){
+        if(file.isEmpty()){
+            logger.error("file is empty");
+            return ResponseEntity.noContent().build();
+        } else{
+            try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))){
+                JAXBContext jaxbContext = JAXBContext.newInstance(AllUsersDTO.class);
+                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                AllUsersDTO users = (AllUsersDTO) jaxbUnmarshaller.unmarshal(reader);
+                logger.info("received list of users from xml file");
+
+
+                List<Users> toSave = new ArrayList<>();
+                for (Users user:users.getUsersList()) {
+                    toSave.add(user);
+                }
+                usersRepository.saveAll(toSave);
+                return ResponseEntity.ok().body("populated successfully ");
+            } catch (IOException | JAXBException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @DeleteMapping
