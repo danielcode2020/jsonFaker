@@ -5,8 +5,8 @@ spring:
     database: postgresql
     hibernate:
       ddl-auto: update
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/json_faker
+  datasource:
+    url: jdbc:postgresql://localhost:5432/json_faker
 #    username: postgres
 #    password: postgres
   mvc:
