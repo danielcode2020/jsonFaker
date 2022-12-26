@@ -5,8 +5,10 @@ import com.example.jsonfaker.configuration.CSVProperties;
 import com.example.jsonfaker.csvUtils.CustomMappingStrategy;
 import com.example.jsonfaker.excelUtils.UserExcelExporter;
 import com.example.jsonfaker.model.Users;
+import com.example.jsonfaker.model.dto.AllUsersDTO;
 import com.example.jsonfaker.model.dto.UserExportDTO;
 import com.example.jsonfaker.repository.UsersRepository;
+import com.example.jsonfaker.service.Exporter;
 import com.example.jsonfaker.service.UserExportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVWriter;
@@ -14,10 +16,10 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import io.swagger.annotations.ApiImplicitParam;
-import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +27,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -50,9 +57,11 @@ public class FackerController {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final Exporter exporter;
+
 
     public FackerController(Logger logger, ObjectMapper objectMapper, RestTemplate restTemplate,
-                            AppProperties customProps, UsersRepository usersRepository, UserExportService userExportService, CSVProperties csvProperties, BCryptPasswordEncoder bCryptPasswordEncoder) {
+                            AppProperties customProps, UsersRepository usersRepository, UserExportService userExportService, CSVProperties csvProperties, BCryptPasswordEncoder bCryptPasswordEncoder, Exporter exporter) {
         this.logger = logger;
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
@@ -61,6 +70,7 @@ public class FackerController {
         this.userExportService = userExportService;
         this.csvProperties = csvProperties;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.exporter = exporter;
     }
 
     @GetMapping("/populate")
@@ -123,6 +133,55 @@ public class FackerController {
                 logger.info("received list of users from file");
                 usersRepository.saveAll(userExportService.getUsersFromUsersDto(userExportDTOList));
             } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @GetMapping("/export-xml")
+    public ResponseEntity<byte[]> exportXml() throws JAXBException, IOException {
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(AllUsersDTO.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+        List<Users> users = new ArrayList<>();
+        usersRepository.findAll().forEach(users::add);
+        AllUsersDTO allUsersDTO = new AllUsersDTO();
+        allUsersDTO.setUsersList(users);
+
+        ByteArrayOutputStream resultXML = new ByteArrayOutputStream();
+        jaxbMarshaller.marshal(allUsersDTO, resultXML);
+        byte[] export = resultXML.toByteArray();
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=\""+exporter.exportXMLFileName() + ".xml\"")
+                .body(export);
+    }
+
+    @PostMapping("/populate-db-from-xml")
+    public ResponseEntity<String> populateDbFromXML(@RequestParam("file") MultipartFile file ){
+        if(file.isEmpty()){
+            logger.error("file is empty");
+            return ResponseEntity.noContent().build();
+        } else{
+            try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))){
+                JAXBContext jaxbContext = JAXBContext.newInstance(AllUsersDTO.class);
+                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                AllUsersDTO users = (AllUsersDTO) jaxbUnmarshaller.unmarshal(reader);
+                logger.info("received list of users from xml file");
+
+
+                List<Users> toSave = new ArrayList<>();
+                for (Users user:users.getUsersList()) {
+                    toSave.add(user);
+                }
+                usersRepository.saveAll(toSave);
+                return ResponseEntity.ok().body("populated successfully ");
+            } catch (IOException | JAXBException e) {
                 throw new RuntimeException(e);
             }
         }
