@@ -57,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/auth/login",
                         "/api/faker/export-csv",
                         "/api/faker/export-excel",
-                        "/**").permitAll()
+                        "/auth/register").permitAll()
                 .antMatchers("/api/users/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
                 .antMatchers("/api/faker/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
                 .anyRequest()

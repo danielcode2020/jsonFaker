@@ -33,6 +33,26 @@ public class SystemUser implements UserDetails {
     )
     private Set<Roles> authorities = new HashSet<>();
 
+    private boolean twoFAisEnabled;
+
+    private String secret;
+
+    public boolean isTwoFAisEnabled() {
+        return twoFAisEnabled;
+    }
+
+    public void setTwoFAisEnabled(boolean twoFAisEnabled) {
+        this.twoFAisEnabled = twoFAisEnabled;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
     public Long getId() {
         return id;
     }
