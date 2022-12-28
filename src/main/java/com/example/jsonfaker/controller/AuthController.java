@@ -11,12 +11,14 @@ import com.example.jsonfaker.repository.UsersRepository;
 import com.example.jsonfaker.security.AuthoritiesConstants;
 import com.example.jsonfaker.security.jwt.JwtUtils;
 import com.example.jsonfaker.service.LoginUserService;
+import com.example.jsonfaker.service.UserAuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,14 +34,19 @@ public class AuthController {
     private final SystemUserRepository systemUserRepository;
     private final RolesRepository rolesRepository;
     private final JwtUtils jwtUtils;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public AuthController(AuthenticationManager authenticationManager, LoginUserService loginUserService, UsersRepository usersRepository, SystemUserRepository systemUserRepository, RolesRepository rolesRepository, JwtUtils jwtUtils) {
+    private final UserAuthService userAuthService;
+
+    public AuthController(AuthenticationManager authenticationManager, LoginUserService loginUserService, UsersRepository usersRepository, SystemUserRepository systemUserRepository, RolesRepository rolesRepository, JwtUtils jwtUtils, BCryptPasswordEncoder bCryptPasswordEncoder, UserAuthService userAuthService) {
         this.authenticationManager = authenticationManager;
         this.loginUserService = loginUserService;
         this.usersRepository = usersRepository;
         this.systemUserRepository = systemUserRepository;
         this.rolesRepository = rolesRepository;
         this.jwtUtils = jwtUtils;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userAuthService = userAuthService;
     }
 
     @PostMapping("/login")
@@ -59,20 +66,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) throws Exception {
 
-        Roles simpleUserRole = new Roles();
-        simpleUserRole.setName(AuthoritiesConstants.USER);
+        userAuthService.register2FA(signupRequest);
 
-        SystemUser user = new SystemUser();
-        user.setPassword(signupRequest.getPassword());
-        user.setUsername(signupRequest.getUsername());
-        user.setAuthorities(rolesRepository.findAllByName("ROLE_USER").stream().collect(Collectors.toSet()));
-
-//        Long id = systemUserRepository.save(user).getId();
-
-
-        return new ResponseEntity<>(systemUserRepository.save(user).getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
