@@ -14,4 +14,10 @@ public class Exporter {
         String currentDateTime = dateFormatter.format(new Date());
         return "users-faker-xml" + currentDateTime;
     }
+
+    public String exportFileNameQR(){
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        return "QR-" + currentDateTime;
+    }
 }
