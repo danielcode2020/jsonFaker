@@ -15,6 +15,9 @@ databaseChangeLog:
               - column:
                   name: password
                   value: $2a$12$NbbFf7hWSuy1wnP1IW/e/e2DrTo.kpfEdcxEmQjJCRsW4LYOt2bBq
+              - column:
+                  name: twofais_enabled
+                  value: false
         - insert:
             tableName: system_users
             columns:
@@ -27,6 +30,9 @@ databaseChangeLog:
               - column:
                   name: password
                   value: $2a$12$uE9jtvnZXBRPjGB57ftP0echz54iHKjHilPLwF4nwIdZ5xIakVsjC
+              - column:
+                  name: twofais_enabled
+                  value: false
         - insert:
             tableName: roles
             columns:

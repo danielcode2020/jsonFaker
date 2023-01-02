@@ -18,7 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+import static org.springframework.security.config.http.SessionCreationPolicy.*;
 
 @Configuration
 @EnableWebSecurity
@@ -59,7 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/faker/export-excel",
                         "/auth/register",
                         "/auth/register2FA",
-                        "/png**").permitAll()
+                        "/png**",
+                        "/auth/verify").permitAll()
                 .antMatchers("/api/users/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
                 .antMatchers("/api/faker/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
                 .anyRequest()

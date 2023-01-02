@@ -1,27 +1,32 @@
 package com.example.jsonfaker.twoFA;
 
-import dev.samstevens.totp.code.CodeVerifier;
-import dev.samstevens.totp.code.HashingAlgorithm;
+import dev.samstevens.totp.code.*;
 import dev.samstevens.totp.exceptions.QrGenerationException;
 import dev.samstevens.totp.qr.QrData;
 import dev.samstevens.totp.qr.QrGenerator;
 import dev.samstevens.totp.secret.SecretGenerator;
+import dev.samstevens.totp.time.SystemTimeProvider;
+import dev.samstevens.totp.time.TimeProvider;
 import dev.samstevens.totp.util.Utils;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 @Service("mfaTokenManager")
 public class DefaultMFATokenManager implements MFATokenManager {
 
-    @Resource
-    private SecretGenerator secretGenerator;
 
-    @Resource
-    private QrGenerator qrGenerator;
+    private final SecretGenerator secretGenerator;
 
-    @Resource
-    private CodeVerifier codeVerifier;
+
+    private final QrGenerator qrGenerator;
+
+
+    private final CodeVerifier codeVerifier;
+
+    public DefaultMFATokenManager(SecretGenerator secretGenerator, QrGenerator qrGenerator, CodeVerifier codeVerifier) {
+        this.secretGenerator = secretGenerator;
+        this.qrGenerator = qrGenerator;
+        this.codeVerifier = codeVerifier;
+    }
 
     @Override
     public String generateSecretKey() {
@@ -32,8 +37,8 @@ public class DefaultMFATokenManager implements MFATokenManager {
     public String getQRCode(String secret) throws QrGenerationException {
         QrData data = new QrData.Builder().label("MFA")
                 .secret(secret)
-                .issuer("Java Development Journal")
-                .algorithm(HashingAlgorithm.SHA256)
+                .issuer("Daniel token")
+                .algorithm(HashingAlgorithm.SHA1)
                 .digits(6)
                 .period(30)
                 .build();
@@ -45,6 +50,10 @@ public class DefaultMFATokenManager implements MFATokenManager {
 
     @Override
     public boolean verifyTotp(String code, String secret) {
-        return codeVerifier.isValidCode(secret, code);
+        SystemTimeProvider timeProvider = new SystemTimeProvider();
+        CodeGenerator codeGenerator = new DefaultCodeGenerator();
+        CodeVerifier verifier = new DefaultCodeVerifier(codeGenerator, timeProvider);
+        return verifier.isValidCode(secret, code);
     }
+
 }
