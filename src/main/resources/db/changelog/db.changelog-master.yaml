@@ -18,3 +18,5 @@ databaseChangeLog:
       file: db/changelog/changeset/20221101174630-create-system-users-roles-table.yaml
   - include:
       file: db/changelog/changeset/insert-admin-and-user.yaml
+  - include:
+      file: db/changelog/changeset/20230109194930-create-mfa-login-session-table.yaml
