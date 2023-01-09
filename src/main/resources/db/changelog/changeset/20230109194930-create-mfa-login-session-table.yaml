@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-mfa-login-session
+      author: Daniel
+      changes:
+        - createTable:
+            tableName: mfa_login_session
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: session_key
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    nullable: false

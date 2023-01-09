@@ -1,10 +1,12 @@
 package com.example.jsonfaker.service;
 
+import com.example.jsonfaker.model.MfaLoginSession;
 import com.example.jsonfaker.model.Roles;
 import com.example.jsonfaker.model.SystemUser;
 import com.example.jsonfaker.model.dto.LoginRequest;
 import com.example.jsonfaker.model.dto.SignupRequest;
 import com.example.jsonfaker.model.dto.TokenResponse;
+import com.example.jsonfaker.repository.MfaLoginSessionRepository;
 import com.example.jsonfaker.repository.RolesRepository;
 import com.example.jsonfaker.repository.SystemUserRepository;
 import com.example.jsonfaker.security.AuthoritiesConstants;
@@ -15,11 +17,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -35,8 +39,10 @@ public class UserAuthService {
     private final LoginUserService loginUserService;
     private final JwtUtils jwtUtils;
 
+    private final MfaLoginSessionRepository mfaLoginSessionRepository;
 
-    public UserAuthService(SystemUserRepository systemUserRepository, RolesRepository rolesRepository, BCryptPasswordEncoder bCryptPasswordEncoder, MFATokenManager mfaTokenManager, AuthenticationManager authenticationManager, LoginUserService loginUserService, JwtUtils jwtUtils) {
+
+    public UserAuthService(SystemUserRepository systemUserRepository, RolesRepository rolesRepository, BCryptPasswordEncoder bCryptPasswordEncoder, MFATokenManager mfaTokenManager, AuthenticationManager authenticationManager, LoginUserService loginUserService, JwtUtils jwtUtils, MfaLoginSessionRepository mfaLoginSessionRepository) {
         this.systemUserRepository = systemUserRepository;
         this.rolesRepository = rolesRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -44,6 +50,7 @@ public class UserAuthService {
         this.authenticationManager = authenticationManager;
         this.loginUserService = loginUserService;
         this.jwtUtils = jwtUtils;
+        this.mfaLoginSessionRepository = mfaLoginSessionRepository;
     }
 
     public void simpleRegister(SignupRequest signupRequest) throws Exception {
@@ -105,6 +112,7 @@ public class UserAuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         if(systemUserRepository.findByUsername(loginRequest.getUsername()).get().isTwoFAisEnabled()){
+            mfaLoginSessionRepository.save(new MfaLoginSession(loginRequest.getUsername()));
             return "redirect to verify page";
         }
 
@@ -123,9 +131,29 @@ public class UserAuthService {
             throw new Exception("Unable to find user with this username");
         }
 
-        if (!mfaTokenManager.verifyTotp(code, user.getSecret())){
-            return "unable to auth";
+        if (!mfaLoginSessionRepository.findAllByUsername(username).stream().findFirst().isPresent()){
+            return "must login / redirect to login page";
         }
+
+        System.out.println(Instant.now());
+
+        MfaLoginSession lastSession  = mfaLoginSessionRepository.findAllByUsername(username)
+                .stream()
+                .sorted(Comparator.comparing(MfaLoginSession::getId).reversed())
+                .findFirst().get();
+
+        System.out.println(lastSession.getCreatedDate());
+
+        if (Duration.between(lastSession.getCreatedDate(),Instant.now()).getSeconds() > 30){
+            return "login session expired / login again";
+        }
+
+        mfaLoginSessionRepository.deleteById(lastSession.getId());
+
+        if (!mfaTokenManager.verifyTotp(code, user.getSecret())){
+            return "wrong code / unable to auth";
+        }
+
         String jwt = jwtUtils.generateJwtToken(user);
         return new TokenResponse(jwt).getToken();
 
