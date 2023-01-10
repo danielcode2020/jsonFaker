@@ -77,15 +77,20 @@ public class FackerController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity getData() {
         ResponseEntity<Object[]> response = restTemplate.getForEntity(customProps.getUri(), Object[].class);
+        System.out.println(response);
+
         List<Users> users = Arrays.stream(response.getBody())
                 .map(obj -> objectMapper.convertValue(obj, Users.class))
                 .collect(Collectors.toList());
+
+        System.out.println(users.toString());
         usersRepository.saveAll(users);
         logger.info("succesfully saved");
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @GetMapping("/export-csv")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public void exportCSV(HttpServletResponse response) throws Exception {
 
         response.setContentType("text/csv");
@@ -107,6 +112,7 @@ public class FackerController {
     }
 
     @GetMapping("/export-excel")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -121,6 +127,7 @@ public class FackerController {
     }
 
     @PostMapping("/upload-from-csv")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public void uploadCSVFile(@RequestParam("file") MultipartFile file ){
         if(file.isEmpty()){
             logger.error("file is empty");
@@ -139,6 +146,7 @@ public class FackerController {
     }
 
     @GetMapping("/export-xml")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity<byte[]> exportXml() throws JAXBException, IOException {
 
         JAXBContext jaxbContext = JAXBContext.newInstance(AllUsersDTO.class);
@@ -163,6 +171,7 @@ public class FackerController {
     }
 
     @PostMapping("/populate-db-from-xml")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity<String> populateDbFromXML(@RequestParam("file") MultipartFile file ){
         if(file.isEmpty()){
             logger.error("file is empty");
@@ -188,6 +197,7 @@ public class FackerController {
     }
 
     @DeleteMapping
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public void deleteUsersFromDb() {
         usersRepository.deleteAll();
     }

@@ -29,6 +29,7 @@ public class UsersController {
     }
 
     @GetMapping
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public List<Users> getAllUsers() {
         List<Users> users = new ArrayList<>();
         usersRepository.findAll().forEach(users::add);
