@@ -61,21 +61,12 @@ public class AuthController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<String> authenticateUser2FA(@Valid @RequestBody VerifyRequest verifyRequest) throws Exception {
-        String response = userAuthService.verify(verifyRequest.getUsername(), verifyRequest.getCode());
+    public ResponseEntity<String> authenticateUser2FA(HttpServletRequest request, @Valid @RequestBody VerifyRequest verifyRequest) throws Exception {
+        System.out.println(request.getHeader("SessionKey"));
+        String response = userAuthService.verify(request.getHeader("SessionKey"), verifyRequest.code());
         return ResponseEntity
                 .ok()
                 .body(response);
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (nonNull(auth)){
-            new SecurityContextLogoutHandler().logout(request,response,auth);
-            return ResponseEntity.ok().body("logout successfully");
-        }
-        return ResponseEntity.ok().body("unable to logout");
     }
 
 

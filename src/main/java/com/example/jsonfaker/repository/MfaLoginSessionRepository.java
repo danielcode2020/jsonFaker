@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MfaLoginSessionRepository extends JpaRepository<MfaLoginSession, Long> {
-    List<MfaLoginSession> findAllByUsername(String username);
+    MfaLoginSession findBySessionKey(String sessionKey);
 }
