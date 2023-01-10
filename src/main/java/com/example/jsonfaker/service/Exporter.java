@@ -20,4 +20,12 @@ public class Exporter {
         String currentDateTime = dateFormatter.format(new Date());
         return "QR-" + currentDateTime;
     }
+
+    public String exportPdfUserFileName(){
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        return "User-" + currentDateTime;
+    }
+
+
 }

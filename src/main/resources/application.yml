@@ -29,7 +29,7 @@ server:
   port: 8080
 
 facker:
-  uri: https://jsonplaceholder.typicode.com/users
+  uri: http://jsonplaceholder.typicode.com/users
 
 
 jwt:
