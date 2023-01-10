@@ -7,6 +7,7 @@ import com.example.jsonfaker.excelUtils.UserExcelExporter;
 import com.example.jsonfaker.model.Users;
 import com.example.jsonfaker.model.dto.AllUsersDTO;
 import com.example.jsonfaker.model.dto.UserExportDTO;
+import com.example.jsonfaker.pdfUtils.PdfUserExporter;
 import com.example.jsonfaker.repository.UsersRepository;
 import com.example.jsonfaker.service.Exporter;
 import com.example.jsonfaker.service.UserExportService;
@@ -27,11 +28,13 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,9 +62,7 @@ public class FackerController {
 
     private final Exporter exporter;
 
-
-    public FackerController(Logger logger, ObjectMapper objectMapper, RestTemplate restTemplate,
-                            AppProperties customProps, UsersRepository usersRepository, UserExportService userExportService, CSVProperties csvProperties, BCryptPasswordEncoder bCryptPasswordEncoder, Exporter exporter) {
+    public FackerController(Logger logger, ObjectMapper objectMapper, RestTemplate restTemplate, AppProperties customProps, UsersRepository usersRepository, UserExportService userExportService, CSVProperties csvProperties, BCryptPasswordEncoder bCryptPasswordEncoder, Exporter exporter) {
         this.logger = logger;
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
@@ -75,7 +76,7 @@ public class FackerController {
 
     @GetMapping("/populate")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-    public ResponseEntity getData() {
+    public ResponseEntity populateDbFromURI() {
         ResponseEntity<Object[]> response = restTemplate.getForEntity(customProps.getUri(), Object[].class);
         System.out.println(response);
 
@@ -194,6 +195,17 @@ public class FackerController {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @GetMapping("/export-pdf/{id}")
+    public ResponseEntity<byte[]> exportPdfUserById(@Valid @PathVariable("id") Long id) throws MalformedURLException {
+        PdfUserExporter pdfUserExporter = new PdfUserExporter();
+        byte[] export = pdfUserExporter.exportUserById(usersRepository.findById(id).get());
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=\""+exporter.exportPdfUserFileName() + ".pdf\"")
+                .body(export);
     }
 
     @DeleteMapping
