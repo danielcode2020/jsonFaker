@@ -112,8 +112,8 @@ public class UserAuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         if(systemUserRepository.findByUsername(loginRequest.getUsername()).get().isTwoFAisEnabled()){
-            mfaLoginSessionRepository.save(new MfaLoginSession(loginRequest.getUsername()));
-            return "redirect to verify page";
+            mfaLoginSessionRepository.save(new MfaLoginSession(loginRequest.getUsername())).getSessionKey();
+            return "SessionKey : " + mfaLoginSessionRepository.save(new MfaLoginSession(loginRequest.getUsername())).getSessionKey();
         }
 
         SystemUser userDetails = (SystemUser) authentication.getPrincipal();
@@ -124,37 +124,27 @@ public class UserAuthService {
 
     }
 
-    public String verify(String username, String code) throws Exception {
+    public String verify(String sessionKey, String code) throws Exception {
 
-        SystemUser user = systemUserRepository.findByUsername(username).get();
-        if (!nonNull(user)){
-            throw new Exception("Unable to find user with this username");
-        }
+        MfaLoginSession currentSession = mfaLoginSessionRepository.findBySessionKey(sessionKey);
 
-        if (!mfaLoginSessionRepository.findAllByUsername(username).stream().findFirst().isPresent()){
+        if (isNull(currentSession)){
             return "must login / redirect to login page";
         }
 
-        System.out.println(Instant.now());
-
-        MfaLoginSession lastSession  = mfaLoginSessionRepository.findAllByUsername(username)
-                .stream()
-                .sorted(Comparator.comparing(MfaLoginSession::getId).reversed())
-                .findFirst().get();
-
-        System.out.println(lastSession.getCreatedDate());
-
-        if (Duration.between(lastSession.getCreatedDate(),Instant.now()).getSeconds() > 30){
+        if (Duration.between(currentSession.getCreatedDate(),Instant.now()).getSeconds() > 30){
             return "login session expired / login again";
         }
 
-        mfaLoginSessionRepository.deleteById(lastSession.getId());
+        SystemUser currentUser = systemUserRepository.findByUsername(currentSession.getUsername()).get();
 
-        if (!mfaTokenManager.verifyTotp(code, user.getSecret())){
+        mfaLoginSessionRepository.deleteById(currentSession.getId());
+
+        if (!mfaTokenManager.verifyTotp(code, currentUser.getSecret())){
             return "wrong code / unable to auth";
         }
 
-        String jwt = jwtUtils.generateJwtToken(user);
+        String jwt = jwtUtils.generateJwtToken(currentUser);
         return new TokenResponse(jwt).getToken();
 
     }
