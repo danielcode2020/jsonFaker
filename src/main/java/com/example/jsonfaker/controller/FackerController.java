@@ -214,4 +214,11 @@ public class FackerController {
         usersRepository.deleteAll();
     }
 
+    @GetMapping("/test")
+    public void forTesting(){
+        for(int i = 0; i<500; i++){
+        }
+        logger.info("received req");
+    }
+
 }
