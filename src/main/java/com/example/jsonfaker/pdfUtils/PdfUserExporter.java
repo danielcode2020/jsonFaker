@@ -32,17 +32,20 @@ public class PdfUserExporter {
 
         pdfDoc.addNewPage();
 
-        String userString = "Report of user with id " +
+        String userString = "Fisa de raport a utilizatorului " +
                 users.getId();
 
-        Paragraph paragraph = new Paragraph(userString);
+        Paragraph paragraph = new Paragraph();
         ImageData data = ImageDataFactory.create(new URL("https://memorynotfound.com/wp-content/uploads/java-duke.png"));
-        paragraph.add(new Image(data).setWidth(75f).setHeight(75f));
-
+        paragraph.add(new Image(data).setWidth(150f).setHeight(150f));
         doc.add(paragraph);
 
-        float [] pointColumnWidths = {150f, 250f};
-        Table table = new Table(pointColumnWidths);
+        Paragraph paragraph1 = new Paragraph().setBold().setFontSize(20f);
+        paragraph1.add(userString).setFixedPosition(250f,725f,300f);
+        doc.add(paragraph1);
+
+        float [] pointColumnWidths = {150f, 350f};
+        Table table = new Table(pointColumnWidths).setFixedPosition(20f,400f,555f);
         table.setFixedLayout();
 
         List<Cell> cellList  = new ArrayList<>();
