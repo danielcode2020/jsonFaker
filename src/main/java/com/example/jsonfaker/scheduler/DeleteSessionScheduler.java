@@ -1,11 +1,15 @@
 package com.example.jsonfaker.scheduler;
 
+import com.example.jsonfaker.model.MfaLoginSession;
 import com.example.jsonfaker.repository.MfaLoginSessionRepository;
 import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DeleteSessionScheduler {
@@ -20,8 +24,13 @@ public class DeleteSessionScheduler {
 
     @Scheduled(fixedRate = 60000)
     public void deleteSessionsFromDb(){
-        mfaLoginSessionRepository.deleteAll();
-        logger.info("All mfa login sessions deleted at {}", Instant.now());
+
+        List<MfaLoginSession> expiredSessions = mfaLoginSessionRepository.findAll()
+                .stream()
+                .filter(currentSession -> Duration.between(currentSession.getCreatedDate(),Instant.now()).getSeconds() > 30)
+                .toList();
+        mfaLoginSessionRepository.deleteAll(expiredSessions);
+        logger.info("All expired mfa login sessions deleted at {}", Instant.now());
     }
 
 }
