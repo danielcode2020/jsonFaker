@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/auth/register2FA",
                         "/png**",
                         "/auth/verify","/api/faker/export-pdf/**",
-                        "/api/faker/test").permitAll()
+                        "/api/faker/test", "/api/jasper/**").permitAll()
                 .antMatchers("/api/users/**","/api/system-user/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
                 .antMatchers("/api/faker/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
                 .anyRequest()
