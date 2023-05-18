@@ -79,44 +79,123 @@
             </staticText>
         </band>
     </columnHeader>
+<!--    <detail>-->
+<!--        <band height="16" splitType="Stretch">-->
+<!--            <line>-->
+<!--                <reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="39f48c34-b6ee-47f7-8876-c3aaee1eb021"/>-->
+<!--                <graphicElement>-->
+<!--                    <pen lineWidth="0.5" lineColor="#999999"/>-->
+<!--                </graphicElement>-->
+<!--            </line>-->
+<!--            <textField>-->
+<!--                <reportElement style="Detail" x="0" y="0" width="111" height="15" uuid="7caf8f3f-c240-4f0f-bcdb-06733ab1b3f7">-->
+<!--                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b4e648d5-260f-4bee-af0e-fae1193b59c9"/>-->
+<!--                </reportElement>-->
+<!--                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>-->
+<!--            </textField>-->
+<!--            <textField>-->
+<!--                <reportElement style="Detail" x="111" y="0" width="111" height="15" uuid="1f5f5d7e-c7b3-47a9-8ebe-accdcaba7e8a">-->
+<!--                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0999af6d-1cce-4a74-9695-b4251763e8ad"/>-->
+<!--                </reportElement>-->
+<!--                <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>-->
+<!--            </textField>-->
+<!--            <textField>-->
+<!--                <reportElement style="Detail" x="222" y="0" width="111" height="15" uuid="98fd5c32-953a-4780-b934-3364cd879eda">-->
+<!--                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="34cec5fc-d902-44b3-ab08-56b1634b1005"/>-->
+<!--                </reportElement>-->
+<!--                <textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>-->
+<!--            </textField>-->
+<!--            <textField>-->
+<!--                <reportElement style="Detail" x="333" y="0" width="111" height="15" uuid="0fa13d0c-6114-452b-8e9e-90ff08fa5fa1">-->
+<!--                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2c5078ed-ae43-4f0a-acb5-8f64233549b0"/>-->
+<!--                </reportElement>-->
+<!--                <textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>-->
+<!--            </textField>-->
+<!--            <textField>-->
+<!--                <reportElement style="Detail" x="444" y="0" width="111" height="15" uuid="e635c264-ff05-4078-bce0-f099977cec7d">-->
+<!--                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7bbd3e63-e295-44c6-94e5-1c45cf0bf26c"/>-->
+<!--                </reportElement>-->
+<!--                <textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>-->
+<!--            </textField>-->
+<!--        </band>-->
+<!--    </detail>-->
     <detail>
-        <band height="16" splitType="Stretch">
-            <line>
-                <reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="39f48c34-b6ee-47f7-8876-c3aaee1eb021"/>
-                <graphicElement>
-                    <pen lineWidth="0.5" lineColor="#999999"/>
-                </graphicElement>
-            </line>
-            <textField>
-                <reportElement style="Detail" x="0" y="0" width="111" height="15" uuid="7caf8f3f-c240-4f0f-bcdb-06733ab1b3f7">
-                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b4e648d5-260f-4bee-af0e-fae1193b59c9"/>
-                </reportElement>
-                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement style="Detail" x="111" y="0" width="111" height="15" uuid="1f5f5d7e-c7b3-47a9-8ebe-accdcaba7e8a">
-                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0999af6d-1cce-4a74-9695-b4251763e8ad"/>
-                </reportElement>
-                <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement style="Detail" x="222" y="0" width="111" height="15" uuid="98fd5c32-953a-4780-b934-3364cd879eda">
-                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="34cec5fc-d902-44b3-ab08-56b1634b1005"/>
-                </reportElement>
-                <textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement style="Detail" x="333" y="0" width="111" height="15" uuid="0fa13d0c-6114-452b-8e9e-90ff08fa5fa1">
-                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2c5078ed-ae43-4f0a-acb5-8f64233549b0"/>
-                </reportElement>
-                <textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement style="Detail" x="444" y="0" width="111" height="15" uuid="e635c264-ff05-4078-bce0-f099977cec7d">
-                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7bbd3e63-e295-44c6-94e5-1c45cf0bf26c"/>
-                </reportElement>
-                <textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
-            </textField>
+        <band>
+            <crosstab>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="39f48c34-b6ee-47f7-8876-c3aaee1eb021"/>-->
+<!--                <crosstabHeaderCell>-->
+<!--                    <cellContents mode="Opaque" backcolor="#CCCCCC">-->
+<!--                        <staticText>-->
+<!--                            <reportElement x="0" y="0" width="100" height="20"/>-->
+<!--                            <text><![CDATA[ID]]></text>-->
+<!--                        </staticText>-->
+<!--                    </cellContents>-->
+<!--                </crosstabHeaderCell>-->
+<!--                <crosstabHeaderCell>-->
+<!--                    <cellContents mode="Opaque" backcolor="#CCCCCC">-->
+<!--                        <staticText>-->
+<!--                            <reportElement x="0" y="0" width="111" height="20"/>-->
+<!--                            <text><![CDATA[Name]]></text>-->
+<!--                        </staticText>-->
+<!--                    </cellContents>-->
+<!--                </crosstabHeaderCell>-->
+<!--                <crosstabHeaderCell>-->
+<!--                    <cellContents mode="Opaque" backcolor="#CCCCCC">-->
+<!--                        <staticText>-->
+<!--                            <reportElement x="0" y="0" width="111" height="20"/>-->
+<!--                            <text><![CDATA[Username]]></text>-->
+<!--                        </staticText>-->
+<!--                    </cellContents>-->
+<!--                </crosstabHeaderCell>-->
+<!--                <crosstabHeaderCell>-->
+<!--                    <cellContents mode="Opaque" backcolor="#CCCCCC">-->
+<!--                        <staticText>-->
+<!--                            <reportElement x="0" y="0" width="111" height="20"/>-->
+<!--                            <text><![CDATA[Email]]></text>-->
+<!--                        </staticText>-->
+<!--                    </cellContents>-->
+<!--                </crosstabHeaderCell>-->
+<!--                <crosstabHeaderCell>-->
+<!--                    <cellContents mode="Opaque" backcolor="#CCCCCC">-->
+<!--                        <staticText>-->
+<!--                            <reportElement x="0" y="0" width="111" height="20"/>-->
+<!--                            <text><![CDATA[Phone]]></text>-->
+<!--                        </staticText>-->
+<!--                    </cellContents>-->
+<!--                </crosstabHeaderCell>-->
+                <crosstabCell width="100" height="20">
+                    <cellContents mode="Opaque" backcolor="#FFFFFF">
+                        <textField>
+                            <reportElement x="0" y="0" width="100" height="20"/>
+                            <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+                        </textField>
+                    </cellContents>
+                </crosstabCell>
+<!--                <crosstabCell width="111" height="20">-->
+<!--                    <cellContents mode="Opaque" backcolor="#FFFFFF">-->
+<!--                        <textField>-->
+<!--                            <reportElement x="0" y="0" width="111" height="20"/>-->
+<!--                            <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>-->
+<!--                        </textField>-->
+<!--                    </cellContents>-->
+<!--                </crosstabCell>-->
+<!--                <crosstabCell width="111" height="20">-->
+<!--                    <cellContents mode="Opaque" backcolor="#FFFFFF">-->
+<!--                        <textField>-->
+<!--                            <reportElement x="0" y="0" width="111" height="20"/>-->
+<!--                            <textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>-->
+<!--                        </textField>-->
+<!--                    </cellContents>-->
+<!--                </crosstabCell>-->
+<!--                <crosstabCell width="111" height="20">-->
+<!--                <cellContents mode="Opaque" backcolor="#FFFFFF">-->
+<!--                    <textField>-->
+<!--                        <reportElement x="0" y="0" width="111" height="20"/>-->
+<!--                        <textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>-->
+<!--                    </textField>-->
+<!--                </cellContents>-->
+<!--                </crosstabCell>-->
+            </crosstab>
         </band>
     </detail>
     <columnFooter>

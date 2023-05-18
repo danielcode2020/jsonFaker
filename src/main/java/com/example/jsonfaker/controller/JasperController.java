@@ -2,7 +2,6 @@ package com.example.jsonfaker.controller;
 
 import com.example.jsonfaker.service.ReportService;
 import net.sf.jasperreports.engine.JRException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +21,15 @@ public class JasperController {
     public void export(){
         try {
             reportService.exportReport("pdf");
+        } catch (FileNotFoundException | JRException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/crosstab")
+    public void exportCrosstab(){
+        try {
+            reportService.exportCrossTab();
         } catch (FileNotFoundException | JRException e) {
             throw new RuntimeException(e);
         }
