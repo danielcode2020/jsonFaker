@@ -1,29 +1,30 @@
 package com.example.jsonfaker.controller;
 
+import com.example.jsonfaker.model.dto.JwtToken;
 import com.example.jsonfaker.model.dto.LoginRequest;
 import com.example.jsonfaker.model.dto.SignupRequest;
 import com.example.jsonfaker.model.dto.VerifyRequest;
 import com.example.jsonfaker.service.Exporter;
 import com.example.jsonfaker.service.UserAuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
-import static java.util.Objects.nonNull;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin
 public class AuthController {
+    private final Logger log = LoggerFactory.getLogger(AuthController.class);
+
     private final Exporter exporter;
 
     private final UserAuthService userAuthService;
@@ -34,8 +35,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        String response = userAuthService.login(loginRequest);
+    public ResponseEntity<JwtToken> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        log.debug("loginRequest : {}", loginRequest);
+        var response = userAuthService.login(loginRequest);
         return ResponseEntity
                 .ok()
                 .body(response);
@@ -61,9 +63,9 @@ public class AuthController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<String> authenticateUser2FA(HttpServletRequest request, @Valid @RequestBody VerifyRequest verifyRequest) throws Exception {
+    public ResponseEntity<JwtToken> authenticateUser2FA(HttpServletRequest request, @Valid @RequestBody VerifyRequest verifyRequest) throws Exception {
         System.out.println(request.getHeader("SessionKey"));
-        String response = userAuthService.verify(request.getHeader("SessionKey"), verifyRequest.code());
+        var response = userAuthService.verify(request.getHeader("SessionKey"), verifyRequest.code());
         return ResponseEntity
                 .ok()
                 .body(response);

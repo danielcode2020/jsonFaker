@@ -1,0 +1,12 @@
+
+<section class="content">
+  <h1>
+    app component ( here kinda of navbar)
+  </h1>
+
+  <div *ngIf="getState()"><a [routerLink]="['']" (click)="logout()"> logout </a></div>
+
+  <div *ngIf="!getState()"><a [routerLink]="['/auth']"> login </a></div>
+
+  <router-outlet></router-outlet>
+</section>
