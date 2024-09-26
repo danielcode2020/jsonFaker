@@ -7,23 +7,18 @@ import {Observable} from "rxjs";
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private stateStorageService = inject(StateStorageService);
-  private applicationConfigService = inject(ApplicationConfigService);
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log("in interceptor...")
-    const serverApiUrl = this.applicationConfigService.getEndpointFor('');
-    if (!request.url || (request.url.startsWith('http') && !(serverApiUrl && request.url.startsWith(serverApiUrl)))) {
-      return next.handle(request);
+
+    const token = this.stateStorageService.getTokenValue();
+    if (token) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     }
 
-    // const token: string | null = this.stateStorageService.getAuthenticationToken();
-    // if (token) {
-    //   request = request.clone({
-    //     setHeaders: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
-    // }
     return next.handle(request);
   }
 }
